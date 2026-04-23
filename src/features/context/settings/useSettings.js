@@ -5,7 +5,7 @@ export function useSettings() {
     const context = useContext(SettingsContext);
 
     if(!context) {
-        throw new Error("Settings context must be used inside CounterProvider ")
+        throw new Error("Settings context must be used inside SettingsProvider ")
     }
 
     return context;

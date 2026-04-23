@@ -1,5 +1,7 @@
 import {useDispatch} from 'react-redux';
+import { Link } from "react-router-dom";
 import {addToCart} from '../../features/cart/cartSlice'
+
 
 function clamp(text, n = 90) {
   if (!text) return "";
@@ -44,7 +46,14 @@ const ProductCard = ({ product }) => {
           {clamp(product.description, 110)}
         </p>
 
-        <div className="flex items-center justify-end">
+        <div className="mt-5 flex items-center justify-between gap-3">
+         <Link
+            to={`/product/${product.id}`}
+            className="rounded-full border border-[var(--border-color)] bg-[var(--card-bg)] px-4 py-2 text-sm font-semibold text-[var(--text-secondary)] transition hover:border-[var(--accent-soft)] hover:text-[var(--accent)]"
+          >
+            View details
+          </Link>
+
          <button
             className="rounded-full bg-[var(--accent)] px-4 py-2 text-sm font-semibold text-white shadow-lg transition hover:bg-[var(--accent-soft)]"
             onClick={handleAddToCart}

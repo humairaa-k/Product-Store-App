@@ -1,4 +1,5 @@
-const initialState = {
+
+export const initialState = JSON.parse(localStorage.getItem("settings")) || {
   theme: "dark",
   view: "grid"
 };

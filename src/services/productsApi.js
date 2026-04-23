@@ -9,7 +9,7 @@ export const fetchProducts = async () => {
       "laptop",
       "headset",
        "phone",
-      ]; //lets see which one to remove then
+      ]; //lets see 
 
   const responses = await Promise.all(
     queries.map((q) =>
@@ -19,7 +19,7 @@ export const fetchProducts = async () => {
    )
   );
 
-  // Merge and de-duplicate because the same product can match multiple queries.
+  // Merge and de-duplicate because the same product can match multiple queries
   const products = Array.from(
     new Map(
       responses

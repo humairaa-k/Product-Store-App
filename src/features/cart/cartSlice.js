@@ -1,10 +1,12 @@
 import { createSlice, nanoid } from "@reduxjs/toolkit";
 
+export const initialCartState = {
+  items: [],
+};
+
 const cartSlice = createSlice({
     name: "cart",
-    initialState: {
-     items: []
-    },
+    initialState: initialCartState,
     reducers: {
         addToCart:{
           reducer(state, action){
@@ -63,6 +65,3 @@ const cartSlice = createSlice({
 
 export const {addToCart, removeFromCart, incQty, decQty, clearCart} = cartSlice.actions;
 export default cartSlice.reducer;
-
-export const selectCartCount = (state)=> state.cart.items.reduce((sum,x)=> sum+ x.qty, 0);
-export const selectCartTotal = (state)=> state.cart.items.reduce((sum,x)=> sum+ x.price * x.qty, 0);

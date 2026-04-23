@@ -8,6 +8,10 @@ export const SettingsProvider = ({ children }) => {
 
   const [state, dispatch] = useReducer(settingsReducer, initialState);
 
+   useEffect(() => {
+    localStorage.setItem("settings",JSON.stringify(state));
+   },[state])
+
   return (
     <SettingsContext.Provider value={{ state, dispatch }}>
       {children}

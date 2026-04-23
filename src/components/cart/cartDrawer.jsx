@@ -1,14 +1,27 @@
-import CartItem from "./cartItem";
+import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { clearCart, selectCartTotal } from "../../features/cart/cartSlice";
 
+import CartItem from "./cartItem";
+import { clearCart } from "../../features/cart/cartSlice";
+
+import {
+  CartTotalPrice,
+  ItemsInCart,
+  NumberOfProdInCart,
+  TotalItemsInCart,
+} from "../../features/cart/cartSelectors";
 
 export default function CartDrawer({ open, onClose }) {
   const dispatch = useDispatch();
-  const items = useSelector((state) => state.cart.items);
-  const total = useSelector(selectCartTotal);
 
-  const itemCount = items.reduce((sum, item) => sum + item.qty, 0);
+  const items = useSelector(ItemsInCart);
+  const totalItems = useSelector(TotalItemsInCart);
+
+  const totalPrice = useSelector(CartTotalPrice);
+  const itemTypes = useSelector(NumberOfProdInCart);
+
+  //shuru k 3 items
+  const previewItems = items.slice(0, 3);
 
   return (
     <div
@@ -36,21 +49,22 @@ export default function CartDrawer({ open, onClose }) {
           <div className="border-b border-[var(--border-color)] px-5 py-5">
             <div className="flex items-center justify-between gap-3 rounded-[28px] border border-[var(--border-color)] bg-[var(--card-bg)] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.16)] backdrop-blur-xl">
               <div>
+
                 <div className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[var(--accent)]">
-                  Cart drawer
+                  Quick cart
                 </div>
                 <div className="mt-2 text-base font-extrabold text-[var(--text-primary)]">
                   Techy Cart
                 </div>
                 <div className="mt-1 text-xs font-semibold text-[var(--text-secondary)]">
-                  {items.length} item types • {itemCount} total items
+                  {itemTypes} item types • {totalItems} total items
                 </div>
+
               </div>
 
               <button
                 className="rounded-full border border-[var(--border-color)] bg-[var(--card-bg)] px-4 py-2 text-sm font-semibold text-[var(--text-secondary)] backdrop-blur-lg transition hover:border-[var(--accent-soft)] hover:text-[var(--accent)]"
-                onClick={onClose}
-              >
+                onClick={onClose}>
                 Close
               </button>
             </div>
@@ -64,19 +78,31 @@ export default function CartDrawer({ open, onClose }) {
                     Nothing here yet
                   </div>
                   <div className="mt-3 text-lg font-extrabold text-[var(--text-primary)]">
-                    Your Cart is empty
+                    Your cart is empty
                   </div>
                   <div className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">
-                    Add products to see them here.
+                    Add products here, open the full cart page for a larger order view.
                   </div>
                 </div>
               </div>
+
             ) : (
-              <ul className="space-y-4">
-                {items.map((item) => (
-                  <CartItem key={item.id} item={item} />
-                ))}
-              </ul>
+
+              <div className="space-y-4">
+
+                <ul className="space-y-4">
+                  {previewItems.map((item) => (
+                    <CartItem key={item.id} item={item} />
+                  ))}
+                </ul>
+
+                {/* more items in carts msg */}
+                {items.length > previewItems.length ? (
+                  <div className="rounded-[22px] border border-dashed border-[var(--accent-soft)]/70 bg-[var(--accent-soft)]/10 px-4 py-3 text-center text-sm font-semibold text-[var(--accent)]">
+                    {items.length - previewItems.length} more item types waiting in the full cart page.
+                  </div>
+                ) : null}
+              </div>
             )}
           </div>
 
@@ -89,11 +115,19 @@ export default function CartDrawer({ open, onClose }) {
                   </div>
                 </div>
                 <div className="rounded-full border border-[var(--accent-soft)] bg-[var(--accent-soft)]/20 px-4 py-2 text-lg font-black text-[var(--accent)]">
-                  ${total.toFixed(2)}
+                  ${totalPrice.toFixed(2)}
                 </div>
               </div>
 
               <div className="mt-4 flex gap-3">
+                <Link
+                  to="/cart"
+                  onClick={onClose}
+                  className="flex-1 rounded-full bg-[var(--accent)] px-4 py-3 text-center text-sm font-semibold text-white shadow-lg transition hover:bg-[var(--accent-soft)]"
+                >
+                  Open cart page
+                </Link>
+
                 <button
                   className="flex-1 rounded-full border border-[var(--border-color)] bg-[var(--card-bg)] px-4 py-3 text-sm font-semibold text-[var(--text-secondary)] backdrop-blur-lg transition hover:border-[var(--accent-soft)] hover:text-[var(--accent)] disabled:cursor-not-allowed disabled:opacity-50"
                   onClick={() => dispatch(clearCart())}
@@ -101,9 +135,7 @@ export default function CartDrawer({ open, onClose }) {
                 >
                   Clear basket
                 </button>
-
               </div>
-
             </div>
           </div>
         </div>

@@ -4,7 +4,8 @@ import { fetchProducts } from '../services/productsApi'
 export const useProducts = () => {
     return useQuery({
       queryKey: ["products"],
-      queryFn: fetchProducts
+      queryFn: fetchProducts,
+      staleTime: 1000 * 60 * 5
     });
 };
 
