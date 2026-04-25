@@ -1,7 +1,7 @@
 
 export const initialState = JSON.parse(localStorage.getItem("settings")) || {
   theme: "dark",
-  view: "grid"
+  view: "grid",
 };
 
 export const settingsReducer = (state, action) => {
@@ -9,13 +9,13 @@ export const settingsReducer = (state, action) => {
     case "TOGGLE_THEME":
       return {
         ...state,
-        theme: state.theme === "dark" ? "light" : "dark"
+        theme: state.theme === "dark" ? "light": "dark" 
       };
 
-    case "TOGGLE_VIEW":
+    case "SET_VIEW":
       return {
         ...state,
-        view: state.view === "grid" ? "list" : "grid"
+        view: action.payload === "list" ? "list" : "grid",
       };
 
     default:

@@ -16,6 +16,7 @@ export default function Cart() {
   const dispatch = useDispatch();
   const items = useSelector(ItemsInCart);
   const totalItems = useSelector(TotalItemsInCart);
+  
   const totalPrice = useSelector(CartTotalPrice);
   const itemTypes = useSelector(NumberOfProdInCart);
 

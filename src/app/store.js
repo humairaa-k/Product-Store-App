@@ -10,6 +10,7 @@ const loadCart = () => {
   }
 }
 
+//store
 export const store = configureStore({
   reducer: {
     cart: cartReducer,

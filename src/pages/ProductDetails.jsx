@@ -5,13 +5,17 @@ import { useDispatch, useSelector } from "react-redux";
 import { useProducts } from "../hooks/useProducts";
 import { addToCart } from "../features/cart/cartSlice";
 import { ItemsInCart, QuantityOfProd } from "../features/cart/cartSelectors";
+import ErrorState from "../components/ui/ErrorState";
+import Loader from "../components/ui/Loader";
 
 function ProductDetails() {
   const { id } = useParams();
 
-  const { data, isLoading, isError } = useProducts();
+  const { data, isLoading, isError, refetch } = useProducts();
 
-  const product = data?.products?.find((item) => String(item.id) === String(id));
+  //already have the data from homepage, no need to hit the api again,using cached pages from useInifinteQuery
+   const product = data?.pages?.flatMap((page) => page.products)?.find((item) => String(item.id) === String(id));
+
 
   const [quantity, setQuantity] = useState(1);
   const dispatch = useDispatch();
@@ -26,47 +30,10 @@ function ProductDetails() {
   };
 
 
-//isko dekhte hai 
-  if (isError) {
-    return (
-      <div className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-        <div className="rounded-[34px] border border-[var(--border-color)] bg-[linear-gradient(180deg,rgba(255,255,255,0.14),rgba(255,255,255,0.04))] px-6 py-16 text-center shadow-[0_32px_80px_-48px_rgba(0,0,0,0.78)] backdrop-blur-2xl">
-          <div className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[var(--accent)]">
-            Something went wrong
-          </div>
-          <h1 className="mt-4 text-2xl font-black text-[var(--text-primary)]">
-            We could not load this product right now.
-          </h1>
-          <Link
-            to="/"
-            className="mt-6 inline-flex rounded-full bg-[var(--accent)] px-6 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-[var(--accent-soft)]"
-          >
-            Back to store
-          </Link>
-        </div>
-      </div>
-    );
-  }
+  if( isLoading ) return <Loader/>
 
-  if (!product) {
-    return (
-      <div className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-        <div className="rounded-[34px] border border-[var(--border-color)] bg-[linear-gradient(180deg,rgba(255,255,255,0.14),rgba(255,255,255,0.04))] px-6 py-16 text-center shadow-[0_32px_80px_-48px_rgba(0,0,0,0.78)] backdrop-blur-2xl">
-          <div className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[var(--accent)]">
-            Product not found
-          </div>
-          <h1 className="mt-4 text-2xl font-black text-[var(--text-primary)]">
-            This product does not exist in the current list.
-          </h1>
-          <Link
-            to="/"
-            className="mt-6 inline-flex rounded-full bg-[var(--accent)] px-6 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-[var(--accent-soft)]"
-          >
-            Back to store
-          </Link>
-        </div>
-      </div>
-    );
+  if (isError && !product) {
+    return <ErrorState message="Could not load product"onRetry={refetch}/>
   }
 
   return (
@@ -152,7 +119,7 @@ function ProductDetails() {
                       </div>
                      
                       <div className="mt-2 text-base font-bold text-[var(--text-primary)]">
-                        {product.category}
+                        {product?.category}
                       </div>
                     </div>
                   ) : null}
@@ -198,7 +165,7 @@ function ProductDetails() {
 
                 <div className="mt-6 flex flex-col gap-3 sm:flex-row">
                   <button
-                    className="rounded-full bg-[var(--accent)] px-6 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-[var(--accent-soft)]"
+                    className="rounded-full bg-[var(--accent)] px-6 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-[var(--accent-soft)] active:scale-95 "
                     onClick={handleAddToCart}
                   >
                     Add {quantity} to cart

@@ -3,56 +3,58 @@ import { useState } from "react";
 import { useProducts } from "../hooks/useProducts";
 import ProductList from "../components/product/productList";
 import { SearchFilter } from "../components/home/SearchFilter";
+import { Showcase } from "../components/home/Showcase";
+import Loader from "../components/ui/Loader";
+import ErrorState from "../components/ui/ErrorState";
+import { isTechProduct } from "../../utils/techProducts";
 
 const categories = ["All", "smartphones", "laptops", "audio"];
 
 const Home = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const { data, isLoading, isError } = useProducts();
 
-  const products = data?.products ?? [];
-  
-  const filteredProducts = products.filter((product) => {
+  const { data, isLoading, isError, refetch, fetchNextPage, 
+          hasNextPage, isFetchingNextPage,} = useProducts();
+
+
+  const allProducts = data?.pages?.flatMap((page) => page.products) ?? [];
+
+  // keep only tech related products
+  const techProducts = allProducts.filter(isTechProduct);
+
+  // search
+  const searchedProducts = techProducts.filter((product) =>
+    product.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  //category filter
+  const filteredProducts = searchedProducts.filter((product) => {
+    if (selectedCategory === "All") return true;
+
     const title = product.title.toLowerCase();
-
-    const matchesSearch = product.title
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase());
-
-    let matchesCategory =
-      selectedCategory === "All" || product.category === selectedCategory;
-
+//audio filter
     if (selectedCategory === "audio") {
-      matchesCategory =
-        title.includes("headset") ||
-        title.includes("airpods");
+      return title.includes("headset") || title.includes("headphone") 
+                   || title.includes("earbud") || title.includes("mobile-accessories");
     }
 
-    return matchesSearch && matchesCategory;
+    return product.category === selectedCategory;
   });
 
   if (isLoading) {
-    return (
-      <section className="mx-auto w-full max-w-7xl px-4 py-10 text-[var(--text-secondary)] sm:px-6 lg:px-8">
-        Loading products...
-      </section>
-    );
+    return <Loader />;
   }
 
   if (isError) {
-    return (
-      <section className="mx-auto w-full max-w-7xl px-4 py-10 text-[var(--text-secondary)] sm:px-6 lg:px-8">
-        Error loading products.
-      </section>
-    );
+    return <ErrorState message="Failed to load products." onRetry={refetch} />;
   }
 
   return (
-    <section className="relative overflow-hidden">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(169,116,79,0.16),transparent_28%),radial-gradient(circle_at_top_right,rgba(255,255,255,0.08),transparent_24%),radial-gradient(circle_at_bottom,rgba(169,116,79,0.1),transparent_30%)]" />
+    <section className="relative overflow-hidden bg-[var(--bg-main)]">
+      <Showcase />
 
-      <div className="relative mx-auto flex w-full max-w-7xl flex-col gap-8 px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
+      <div className="relative mx-auto flex w-full max-w-7xl flex-col gap-8 px-4 py-10 sm:px-6 lg:px-8 lg:py-12">
         <SearchFilter
           search={searchTerm}
           setSearch={setSearchTerm}
@@ -63,6 +65,25 @@ const Home = () => {
 
         <div className="mx-auto w-full">
           <ProductList products={filteredProducts} />
+        </div>
+
+        {/* when filters return nothing */}
+        {filteredProducts.length === 0 && !isLoading && (
+          <p className="text-center text-sm text-[var(--text-secondary)]">
+            No tech products found. Try a different search or category.
+          </p>
+        )}
+
+        {/* Load more btn */}
+        <div className="flex justify-center mt-10">
+          {hasNextPage && (
+            <button
+              onClick={() => fetchNextPage()}
+              className="rounded-full bg-[var(--accent)] px-6 py-3 text-white font-semibold transition hover:bg-[var(--accent-soft)]"
+            >
+              {isFetchingNextPage ? "Loading..." : "Load More"}
+            </button>
+          )}
         </div>
       </div>
     </section>
