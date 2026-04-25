@@ -133,7 +133,7 @@ export default function CartDrawer({ open, onClose }) {
                   onClick={() => dispatch(clearCart())}
                   disabled={items.length === 0}
                 >
-                  Clear basket
+                  Clear Cart
                 </button>
               </div>
             </div>
