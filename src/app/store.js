@@ -2,13 +2,13 @@ import { configureStore } from "@reduxjs/toolkit";
 import cartReducer from "../features/cart/cartSlice";
 
 const loadCart = () => {
-  try{
+  try {
     const data = localStorage.getItem("cart");
     return data ? JSON.parse(data) : undefined;
-  }catch {
+  } catch {
     return undefined;
   }
-}
+};
 
 //store
 export const store = configureStore({
@@ -20,13 +20,12 @@ export const store = configureStore({
   },
 });
 
-
 store.subscribe(() => {
   try {
     const state = store.getState();
     localStorage.setItem("cart", JSON.stringify(state.cart));
   } catch {
-     console.error("Cart load nae hua", err);
-  return undefined;
+    console.error("Cart load nae hua", err);
+    return undefined;
   }
 });

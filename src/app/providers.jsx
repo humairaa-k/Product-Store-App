@@ -7,17 +7,14 @@ import { useEffect } from "react";
 
 const queryClient = new QueryClient();
 
-
-
 export const AppProviders = ({ children }) => {
   return (
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
         <SettingsProvider>
-         <BrowserRouter>{children}</BrowserRouter>
+          <BrowserRouter>{children}</BrowserRouter>
         </SettingsProvider>
       </QueryClientProvider>
     </Provider>
   );
 };
-

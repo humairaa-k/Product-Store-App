@@ -1,9 +1,7 @@
 import { decQty, incQty, removeFromCart } from "../../features/cart/cartSlice";
 import { useDispatch } from "react-redux";
 
-
 export default function CartPageItem({ item }) {
-
   const dispatch = useDispatch();
   const totalForItem = item.price * item.qty;
 
@@ -14,7 +12,8 @@ export default function CartPageItem({ item }) {
       <div className="relative flex flex-col gap-5 lg:flex-row lg:items-center">
         <div className="flex items-center gap-4">
           <div className="grid h-24 w-24 shrink-0 place-items-center rounded-[24px] border border-[var(--border-color)] bg-[var(--card-bg)] shadow-[inset_0_1px_0_rgba(255,255,255,0.16)] backdrop-blur-xl">
-            <img src={item.thumbnail}
+            <img
+              src={item.thumbnail}
               alt={item.title}
               className="h-16 w-16 object-contain transition duration-300 group-hover:scale-105"
               loading="lazy"
@@ -53,7 +52,9 @@ export default function CartPageItem({ item }) {
               <div className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--text-secondary)]">
                 Quantity
               </div>
-              <div className="text-lg font-black text-[var(--text-primary)]">{item.qty}</div>
+              <div className="text-lg font-black text-[var(--text-primary)]">
+                {item.qty}
+              </div>
             </div>
 
             <button
@@ -67,7 +68,8 @@ export default function CartPageItem({ item }) {
 
           <button
             className="rounded-full border border-[var(--border-color)] bg-[var(--card-bg)] px-5 py-3 text-sm font-semibold text-[var(--text-secondary)] backdrop-blur-lg transition hover:border-[var(--accent-soft)] hover:text-[var(--accent)]"
-            onClick={() => dispatch(removeFromCart(item.id))} >
+            onClick={() => dispatch(removeFromCart(item.id))}
+          >
             Remove item
           </button>
         </div>

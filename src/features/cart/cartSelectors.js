@@ -1,8 +1,6 @@
-
 // this file contains all redux cart selectors so
 // instead of using useSelector directly in components, we centralize
 //  all reading logic here for better structure and reusability.
-
 
 export const ItemsInCart = (state) => state.cart.items;
 

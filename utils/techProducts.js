@@ -6,7 +6,7 @@ export const isTechProduct = (product) => {
     "earbud",
     "headset",
     "smartphones",
-    "tablet,"
+    "tablet,",
   ];
 
   const title = product.title?.toLowerCase() ?? "";

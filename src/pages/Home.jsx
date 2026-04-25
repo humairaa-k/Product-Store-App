@@ -7,16 +7,24 @@ import { Showcase } from "../components/home/Showcase";
 import Loader from "../components/ui/Loader";
 import ErrorState from "../components/ui/ErrorState";
 import { isTechProduct } from "../../utils/techProducts";
+import SkeletonCard from "../components/ui/SkeletonCard";
 
 const categories = ["All", "smartphones", "laptops", "audio"];
 
 const Home = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [view, setView] = useState("grid");
 
-  const { data, isLoading, isError, refetch, fetchNextPage, 
-          hasNextPage, isFetchingNextPage,} = useProducts();
-
+  const {
+    data,
+    isLoading,
+    isError,
+    refetch,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useProducts();
 
   const allProducts = data?.pages?.flatMap((page) => page.products) ?? [];
 
@@ -33,18 +41,18 @@ const Home = () => {
     if (selectedCategory === "All") return true;
 
     const title = product.title.toLowerCase();
-//audio filter
+    //audio filter
     if (selectedCategory === "audio") {
-      return title.includes("headset") || title.includes("headphone") 
-                   || title.includes("earbud") || title.includes("mobile-accessories");
+      return (
+        title.includes("headset") ||
+        title.includes("headphone") ||
+        title.includes("earbud") ||
+        title.includes("mobile-accessories")
+      );
     }
 
     return product.category === selectedCategory;
   });
-
-  if (isLoading) {
-    return <Loader />;
-  }
 
   if (isError) {
     return <ErrorState message="Failed to load products." onRetry={refetch} />;
@@ -63,9 +71,22 @@ const Home = () => {
           categories={categories}
         />
 
-        <div className="mx-auto w-full">
+        {/* skeleton loader */}
+        {isLoading ? (
+          <div
+            className={
+              view === "grid"
+                ? "grid grid-cols-1 justify-items-center gap-6 sm:grid-cols-2 lg:grid-cols-3"
+                : "flex flex-col gap-6"
+            }
+          >
+            {Array.from({ length: 6 }).map((_, i) => (
+              <SkeletonCard key={i} view={view} />
+            ))}
+          </div>
+        ) : (
           <ProductList products={filteredProducts} />
-        </div>
+        )}
 
         {/* when filters return nothing */}
         {filteredProducts.length === 0 && !isLoading && (

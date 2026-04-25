@@ -5,12 +5,11 @@ import initialState from "./settingsReducer";
 export const SettingsContext = createContext();
 
 export const SettingsProvider = ({ children }) => {
-
   const [state, dispatch] = useReducer(settingsReducer, initialState);
 
-   useEffect(() => {
-    localStorage.setItem("settings",JSON.stringify(state));
-   },[state])
+  useEffect(() => {
+    localStorage.setItem("settings", JSON.stringify(state));
+  }, [state]);
 
   return (
     <SettingsContext.Provider value={{ state, dispatch }}>
@@ -18,4 +17,3 @@ export const SettingsProvider = ({ children }) => {
     </SettingsContext.Provider>
   );
 };
-

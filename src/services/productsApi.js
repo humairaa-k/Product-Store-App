@@ -4,18 +4,23 @@ const BASE_URL = "https://dummyjson.com/products";
 const LIMIT = 6;
 
 // sir i think im not doing this right , it almost feels like im fighting the API ,
-// bc i wanted to fetch only tech related products from the start using query param 
-// then i had to update and add inifiniteScroll for which i had to change how i fetched data 
+// bc i wanted to fetch only tech related products from the start using query param
+// then i had to update and add inifiniteScroll for which i had to change how i fetched data
 // but it didnt provide the desired products which i wanted so i took ai guidance for this ,
 // tried to find another api but failed ,
-// pls guide me if im doing anything wrong 
-// or needs improvement , 
+// pls guide me if im doing anything wrong
+// or needs improvement ,
 // here is my email: humirakhaliq2@gmail.com
 
-const TECH_CATEGORIES = ["laptops","headphones","smartphones", "mobile-accessories","tablets"];
+const TECH_CATEGORIES = [
+  "laptops",
+  "headphones",
+  "smartphones",
+  "mobile-accessories",
+  "tablets",
+];
 
 export const fetchProducts = async ({ pageParam = 0 }) => {
-  
   const responses = await Promise.all(
     TECH_CATEGORIES.map((cat) =>
       axios.get(`${BASE_URL}/category/${cat}`, {
@@ -27,12 +32,10 @@ export const fetchProducts = async ({ pageParam = 0 }) => {
     )
   );
 
-//combine them all in one array
+  //combine them all in one array
   const products = responses.flatMap((res) => res.data.products);
 
-  const hasMore = responses.some(
-    (res) => pageParam + LIMIT < res.data.total
-  );
+  const hasMore = responses.some((res) => pageParam + LIMIT < res.data.total);
 
   return {
     products,

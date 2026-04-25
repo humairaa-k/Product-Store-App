@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { Star } from "lucide-react";
-import { submitReview } from "../../services/productsApi"
+import { submitReview } from "../../services/productsApi";
 
 const ReviewForm = ({ productId }) => {
   const [rating, setRating] = useState(0);
@@ -31,8 +31,12 @@ const ReviewForm = ({ productId }) => {
         <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full border border-[var(--accent-soft)]/30 bg-[var(--accent)]/10">
           <Star className="h-5 w-5 fill-[var(--accent-soft)] text-[var(--accent-soft)]" />
         </div>
-        <p className="text-sm font-bold text-[var(--text-primary)]">Review submitted!</p>
-        <p className="mt-1 text-xs text-[var(--text-secondary)]">Thanks for your feedback.</p>
+        <p className="text-sm font-bold text-[var(--text-primary)]">
+          Review submitted!
+        </p>
+        <p className="mt-1 text-xs text-[var(--text-secondary)]">
+          Thanks for your feedback.
+        </p>
         <button
           onClick={() => setSubmitted(false)}
           className="mt-4 rounded-full border border-[var(--border-color)] px-5 py-2 text-xs font-semibold text-[var(--text-secondary)] transition hover:border-[var(--accent-soft)] hover:text-[var(--accent)]"
@@ -45,7 +49,6 @@ const ReviewForm = ({ productId }) => {
 
   return (
     <div className="rounded-[34px] border border-[var(--border-color)] bg-[linear-gradient(180deg,rgba(255,255,255,0.14),rgba(255,255,255,0.04))] p-6 shadow-[0_28px_70px_-44px_rgba(0,0,0,0.78)] backdrop-blur-2xl sm:p-7">
-
       <div className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[var(--accent)]">
         Leave a review
       </div>
