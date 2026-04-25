@@ -7,6 +7,7 @@ import { addToCart } from "../features/cart/cartSlice";
 import { ItemsInCart, QuantityOfProd } from "../features/cart/cartSelectors";
 import ErrorState from "../components/ui/ErrorState";
 import Loader from "../components/ui/Loader";
+import ReviewForm from "../components/product/ReviewForm";
 
 function ProductDetails() {
   const { id } = useParams();
@@ -60,7 +61,7 @@ function ProductDetails() {
           </div>
 
           <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-start">
-            
+            <div className="flex flex-col gap-5">
             <div className="rounded-[34px] border border-[var(--border-color)] bg-[linear-gradient(180deg,rgba(255,255,255,0.14),rgba(255,255,255,0.04))] p-6 shadow-[0_28px_70px_-44px_rgba(0,0,0,0.78)] backdrop-blur-2xl">
               <div className="grid min-h-[340px] place-items-center rounded-[28px] border border-[var(--border-color)] bg-[var(--card-bg)] p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] backdrop-blur-xl sm:min-h-[440px]">
                
@@ -70,7 +71,10 @@ function ProductDetails() {
                   className="max-h-[320px] w-full max-w-md object-contain sm:max-h-[400px]"
                 />
               </div>
+                      
+            </div>
 
+                <ReviewForm productId={product.id} />
             </div>
 
             <div className="space-y-6">
@@ -177,9 +181,11 @@ function ProductDetails() {
                   >
                     Go to cart
                   </Link>
+                  
                 </div>
               </div>
             </div>
+{/* not here */}
           </div>
         </div>
       </div>

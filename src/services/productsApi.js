@@ -9,7 +9,7 @@ const LIMIT = 6;
 // but it didnt provide the desired products which i wanted so i took ai guidance for this ,
 // tried to find another api but failed ,
 // pls guide me if im doing anything wrong 
-// or needs to be improved , 
+// or needs improvement , 
 // here is my email: humirakhaliq2@gmail.com
 
 const TECH_CATEGORIES = ["laptops","headphones","smartphones", "mobile-accessories","tablets"];
@@ -39,4 +39,16 @@ export const fetchProducts = async ({ pageParam = 0 }) => {
     nextSkip: pageParam + LIMIT,
     hasMore,
   };
+};
+
+// This func sends the review to api
+export const submitReview = async ({ productId, review }) => {
+  const res = await fetch(`https://dummyjson.com/products/${productId}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ review }),
+  });
+
+  if (!res.ok) throw new Error("Failed to submit review");
+  return res.json();
 };
